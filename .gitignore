@@ -1,0 +1,13 @@
+.cloud
+.storage
+
+custom_components
+deps
+tts
+
+.HA_VERSION
+
+*.db*
+*.log*
+
+secrets.yaml
