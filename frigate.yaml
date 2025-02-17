@@ -1,0 +1,55 @@
+birdseye:
+  enabled: false
+
+cameras:
+  bedroom:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://admin:HASScamera@10.77.77.161:554/cam/realmonitor?channel=1&subtype=0
+          roles:
+            - detect
+            - record
+    detect:
+      enabled: true
+      width: 1920
+      height: 1080
+    record:
+      enabled: true
+    snapshots:
+      enabled: false
+
+  living_room:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://frigate:aIn#3fQG%sSdumJI@10.77.77.102:554/live
+          roles:
+            - detect
+            - record
+    detect:
+      enabled: true
+      width: 2592
+      height: 1944
+    record:
+      enabled: true
+    snapshots:
+      enabled: false
+
+detectors:
+  coral:
+    type: edgetpu
+    device: usb
+
+mqtt:
+  enabled: true
+  host: core-mosquitto
+  user: frigate-mqtt
+  password: c3SNJP4K7cBxRD
+
+objects:
+  track:
+    - person
+    - cat
+
+version: 0.15-1

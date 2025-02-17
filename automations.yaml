@@ -1,0 +1,266 @@
+- id: '1739766485502'
+  alias: Bedroom Desk Button
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - event.bedroom_desk_button_action
+    not_from: unavailable
+    not_to: unavailable
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''single''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.bedroom_floor_lamp
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''double''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.bedroom_floor_lamp
+          - light.bedroom_ceiling_light_group
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''hold''}}'
+      sequence:
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.bedroom_desk_button_held_toggle
+      - action: script.brighten_lights
+        metadata: {}
+        data:
+          light_entities:
+          - light.bedroom_floor_lamp
+          - light.bedroom_ceiling_light_group
+          button_boolean: input_boolean.bedroom_desk_button_held_toggle
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
+      sequence:
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.bedroom_desk_button_held_toggle
+  mode: restart
+- id: '1739772498563'
+  alias: Bedroom Wall Button
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - event.bedroom_wall_button_action
+    not_from: unavailable
+    not_to: unavailable
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''single''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.bedroom_ceiling_light_group
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''double''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.bedroom_floor_lamp
+          - light.bedroom_ceiling_light_group
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''hold''}}'
+      sequence:
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.bedroom_wall_button_held_toggle
+      - action: script.brighten_lights
+        metadata: {}
+        data:
+          light_entities:
+          - light.bedroom_floor_lamp
+          - light.bedroom_ceiling_light_group
+          button_boolean: input_boolean.bedroom_desk_button_held_toggle
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
+      sequence:
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.bedroom_wall_button_held_toggle
+  mode: restart
+- id: '1739772581329'
+  alias: Kitchen Wall Button
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - event.kitchen_wall_button_action
+    not_from: unavailable
+    not_to: unavailable
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''single''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.kitchen_ceiling_light_group
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''double''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.kitchen_ceiling_light_group
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''hold''}}'
+      sequence:
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.kitchen_wall_button_held_toggle
+      - action: script.brighten_lights
+        metadata: {}
+        data:
+          light_entities:
+          - light.kitchen_ceiling_light_group
+          button_boolean: input_boolean.bedroom_desk_button_held_toggle
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
+      sequence:
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.kitchen_wall_button_held_toggle
+  mode: restart
+- id: '1739772705029'
+  alias: Living Room Wall Button
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - event.living_room_wall_button_action
+    not_from: unavailable
+    not_to: unavailable
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''single''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.living_room_cantilever_lamp
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''double''}}'
+      sequence:
+      - action: script.adaptive_toggle_batch
+        metadata: {}
+        data:
+          devices:
+          - light.living_room_cantilever_lamp
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''hold''}}'
+      sequence:
+      - action: input_boolean.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.living_room_wall_button_held_toggle
+      - action: script.brighten_lights
+        metadata: {}
+        data:
+          light_entities:
+          - light.living_room_cantilever_lamp
+          button_boolean: input_boolean.bedroom_desk_button_held_toggle
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
+      sequence:
+      - action: input_boolean.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: input_boolean.living_room_wall_button_held_toggle
+  mode: restart
+- id: '1739772883844'
+  alias: By Sun State
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sun.sun
+    from: below_horizon
+    to: above_horizon
+    id: sunrise
+  - trigger: state
+    entity_id:
+    - sun.sun
+    from: above_horizon
+    to: below_horizon
+    id: sunset
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - sunrise
+      sequence:
+      - type: turn_on
+        device_id: f39c8edd2259293896506bfde8ac5867
+        entity_id: c10382e1340d1c5c85616dc79008063a
+        domain: switch
+      - type: turn_on
+        device_id: e9f1a05301d29889c6544649d3109a89
+        entity_id: cca521d2672d06ba2b09b64546ebe08d
+        domain: switch
+    - conditions:
+      - condition: trigger
+        id:
+        - sunset
+      sequence:
+      - type: turn_off
+        device_id: f39c8edd2259293896506bfde8ac5867
+        entity_id: c10382e1340d1c5c85616dc79008063a
+        domain: switch
+  mode: single

@@ -1,0 +1,63 @@
+esphome:
+  name: bedroom
+  friendly_name: bedroom
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret BEDROOM_API_ENCRYPTION_KEY
+
+ota:
+  platform: esphome
+  password: !secret BEDROOM_OTA_PASSWORD
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO0_IN
+  phy_addr: 1
+  power_pin: GPIO16
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1100ms
+    window: 1100ms
+    active: True
+
+# bluetooth_proxy:
+#   active: True
+
+sensor:
+- platform: xiaomi_hhccjcy01
+  mac_address: 'C4:7C:8D:6D:D1:80'
+  temperature:
+    name: "Pothos Temperature"
+  moisture:
+    name: "Pothos Moisture"
+  illuminance:
+    name: "Pothos Illuminance"
+  conductivity:
+    name: "Pothos Soil Conductivity"
+  battery_level:
+    name: "Pothos Battery Level"
+- platform: xiaomi_hhccjcy01
+  mac_address: '5C:85:7E:13:26:C3'
+  temperature:
+    name: "Money Tree Temperature"
+  moisture:
+    name: "Money Tree Moisture"
+  illuminance:
+    name: "Money Tree Illuminance"
+  conductivity:
+    name: "Money Tree Soil Conductivity"
+  battery_level:
+    name: "Money Tree Battery Level"

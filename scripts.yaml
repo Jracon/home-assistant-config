@@ -1,0 +1,94 @@
+adaptive_toggle:
+  alias: Adaptive Toggle
+  fields:
+    device:
+      description: Device entity
+      example: switch.light_bulb
+  sequence:
+  - if:
+    - condition: template
+      value_template: '{{ is_state(device, ''off'') }}'
+      enabled: true
+    then:
+    - data:
+        turn_on_lights: true
+        adapt_color: true
+        adapt_brightness: true
+        lights:
+        - '{{ device }}'
+        entity_id: switch.adaptive_lighting_philips_hue
+      enabled: true
+      action: adaptive_lighting.apply
+    else:
+    - data: {}
+      target:
+        entity_id: '{{ device }}'
+      enabled: true
+      action: light.turn_off
+  mode: single
+  icon: mdi:theme-light-dark
+adaptive_toggle_batch:
+  alias: Adaptive Toggle (Batch)
+  fields:
+    devices:
+      description: List of device entities
+      example: ''
+  sequence:
+  - repeat:
+      count: '{{ devices | length }}'
+      sequence:
+      - variables:
+          current_device: '{{ devices[repeat.index - 1] }}'
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ is_state(current_device, ''on'') }}'
+          sequence:
+          - target:
+              entity_id: '{{ current_device }}'
+            action: light.turn_off
+        - conditions:
+          - condition: template
+            value_template: '{{ is_state(current_device, ''off'') }}'
+          sequence:
+          - data:
+              turn_on_lights: true
+              adapt_color: true
+              adapt_brightness: true
+              lights: '{{ current_device }}'
+              entity_id: switch.adaptive_lighting_philips_hue
+            action: adaptive_lighting.apply
+  mode: parallel
+  icon: mdi:theme-light-dark
+brighten_lights:
+  alias: Brighten Lights
+  mode: restart
+  fields:
+    light_entities:
+      description: Comma-separated list of light entities to brighten
+      example: light.ceiling_lights, light.lamp
+    button_boolean:
+      description: The input_boolean tracking the button hold
+      example: input_boolean.button1_held
+  sequence:
+  - repeat:
+      sequence:
+      - repeat:
+          count: '{{ light_entities | length }}'
+          sequence:
+          - variables:
+              current_light: '{{ light_entities[repeat.index - 1] }}'
+          - if:
+            - condition: template
+              value_template: '{{ is_state(current_light, ''on'') }}'
+            then:
+            - target:
+                entity_id: '{{ current_light }}'
+              data:
+                brightness_step: 5
+              action: light.turn_on
+      - delay:
+          milliseconds: 200
+      while:
+      - condition: template
+        value_template: '{{ states(button_boolean) == ''on'' }}'

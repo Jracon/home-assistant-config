@@ -1,9 +1,16 @@
 .cloud
+.exports
+.jwt_secret
+.timeline
+.vacuum
 .storage
 
 custom_components
 deps
+model_cache
 tts
+www
+zigbee2mqtt
 
 .HA_VERSION
 
