@@ -156,7 +156,7 @@
         data:
           light_entities:
           - light.kitchen_ceiling_light_group
-          button_boolean: input_boolean.bedroom_desk_button_held_toggle
+          button_boolean: input_boolean.kitchen_wall_button_held_toggle
     - conditions:
       - condition: template
         value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
@@ -197,30 +197,6 @@
         data:
           devices:
           - light.living_room_cantilever_lamp
-    - conditions:
-      - condition: template
-        value_template: '{{trigger.to_state.attributes.event_type == ''hold''}}'
-      sequence:
-      - action: input_boolean.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.living_room_wall_button_held_toggle
-      - action: script.brighten_lights
-        metadata: {}
-        data:
-          light_entities:
-          - light.living_room_cantilever_lamp
-          button_boolean: input_boolean.bedroom_desk_button_held_toggle
-    - conditions:
-      - condition: template
-        value_template: '{{trigger.to_state.attributes.event_type == ''release''}}'
-      sequence:
-      - action: input_boolean.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: input_boolean.living_room_wall_button_held_toggle
   mode: restart
 - id: '1739772883844'
   alias: By Sun State
@@ -263,4 +239,113 @@
         device_id: f39c8edd2259293896506bfde8ac5867
         entity_id: c10382e1340d1c5c85616dc79008063a
         domain: switch
+  mode: single
+- id: '1741378121171'
+  alias: Patio Exterior Button
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - event.patio_exterior_button_action
+    not_from: unavailable
+    not_to: unavailable
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''single''}}'
+      sequence:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: light.patio_exterior_light
+            state: 'on'
+          - condition: state
+            entity_id: input_boolean.patio_exterior_button_toggle
+            state: 'off'
+          sequence:
+          - action: input_boolean.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: input_boolean.patio_exterior_button_toggle
+        - conditions:
+          - condition: state
+            entity_id: light.patio_exterior_light
+            state: 'on'
+          - condition: state
+            entity_id: input_boolean.patio_exterior_button_toggle
+            state: 'on'
+          sequence:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.patio_exterior_light
+          - action: input_boolean.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: input_boolean.patio_exterior_button_toggle
+        default:
+        - action: light.toggle
+          metadata: {}
+          data: {}
+          target:
+            entity_id: light.patio_exterior_light
+    - conditions:
+      - condition: template
+        value_template: '{{trigger.to_state.attributes.event_type == ''double''}}'
+      sequence:
+      - type: toggle
+        device_id: f92de259ffcb4c0a35e62d203495f19d
+        entity_id: 5bbc5e519228188c394ba9435cf6f9f4
+        domain: switch
+  mode: restart
+- id: '1741378206771'
+  alias: Patio Door Sensor
+  description: ''
+  triggers:
+  - type: opened
+    device_id: 051cac3e2ca216b175cb3c2ad17124d2
+    entity_id: d324ce26a6ae7918be7caa1093f3ade4
+    domain: binary_sensor
+    trigger: device
+    id: opened
+  - type: not_opened
+    device_id: 051cac3e2ca216b175cb3c2ad17124d2
+    entity_id: d324ce26a6ae7918be7caa1093f3ade4
+    domain: binary_sensor
+    trigger: device
+    id: closed
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id:
+        - opened
+      - condition: state
+        entity_id: sun.sun
+        state: below_horizon
+      sequence:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.patio_exterior_light
+    - conditions:
+      - condition: trigger
+        id:
+        - closed
+      - condition: state
+        entity_id: input_boolean.patio_exterior_button_toggle
+        state: 'off'
+      sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: light.patio_exterior_light
   mode: single

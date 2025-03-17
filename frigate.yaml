@@ -36,6 +36,8 @@ cameras:
     snapshots:
       enabled: false
 
+    objects:
+      mask: 0.124,0.198,0.136,0.725,0.002,0.734,0.002,0.053
 detectors:
   coral:
     type: edgetpu
@@ -51,5 +53,19 @@ objects:
   track:
     - person
     - cat
+
+record:
+  enabled: true
+  retain:
+    days: 2
+    mode: motion
+  alerts:
+    retain:
+      days: 2
+      mode: motion
+  detections:
+    retain:
+      days: 2
+      mode: motion
 
 version: 0.15-1

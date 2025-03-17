@@ -88,7 +88,10 @@ brighten_lights:
                 brightness_step: 5
               action: light.turn_on
       - delay:
-          milliseconds: 200
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 100
       while:
       - condition: template
         value_template: '{{ states(button_boolean) == ''on'' }}'
